@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="properties.xacro"/>
+  <xacro:include filename="inertia_macros.xacro"/>
+  <xacro:include filename="materials.xacro"/>
+
+
+    <!-- base and base footprint -->
+
+    <link name="base_footprint"/>
+
+    <joint name="base_footprint_oint" type="fixed">
+      <origin xyz="0.0 0.0 ${base_link_offset_z}" rpy="0.0 0.0 0.0"/>
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
+    </joint>
+
+    <link name="base_link"/>
+
+
+    <!-- Chassis -->
+
+    <joint name="chassis_joint" type="fixed">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <parent link="base_link"/>
+      <child link="chassis_link"/>
+    </joint>
+
+    <link name="chassis_link">
+      <xacro:inertial_box mass="${chassis_mass}" x="${chassis_x}" y="${chassis_y}" z="${chassis_z}">
+        <origin xyz="0.0 0.0 ${chassis_visual_offset_z}" rpy="0.0 0.0 0.0"/>
+      </xacro:inertial_box>
+
+      <visual>
+        <origin xyz="0.0 0.0 ${chassis_visual_offset_z}" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <box size="${chassis_x} ${chassis_y} ${chassis_z}"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 ${chassis_visual_offset_z}" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <box size="${chassis_x} ${chassis_y} ${chassis_z}"/>
+        </geometry>
+      </collision>
+    </link>
+
+
+    <!-- Front left wheel-->
+
+    <joint name="fl_wheel_joint" type="continuous">
+      <origin xyz="${wheel_offset_x} ${wheel_offset_y} 0.0" rpy="-${pi/2} 0.0 0.0"/>
+      <parent link="base_link"/>
+      <child link="fl_wheel_link"/>
+      <axis xyz="0.0 0.0 1"/>
+      <limit effort="0.5" velocity="10.0"/>
+    </joint>
+
+    <link name="fl_wheel_link">
+      <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_length}" radius="${wheel_radius}">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      </xacro:inertial_cylinder>
+
+      <visual name="">
+        <origin xyz="0.0 0.0 0.0" rpy="${pi/2} 0.0 0.0"/>
+        <geometry>
+          <!-- <sphere radius=".1"/> -->
+          <mesh filename="package://mecanum_robot/meshes/mecanum_wheel_left.STL" scale="0.002 .002 0.002"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <sphere radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+
+
+    <!-- Rear left wheel-->
+
+    <joint name="rl_wheel_joint" type="continuous">
+      <origin xyz="-${wheel_offset_x} ${wheel_offset_y} 0.0" rpy="-${pi/2} 0.0 0.0"/>
+      <parent link="base_link"/>
+      <child link="rl_wheel_link"/>
+      <axis xyz="0.0 0.0 1"/>
+      <limit effort="0.5" velocity="10.0"/>
+    </joint>
+
+    <link name="rl_wheel_link">
+      <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_length}" radius="${wheel_radius}">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      </xacro:inertial_cylinder>
+
+      <visual name="">
+        <origin xyz="0.0 0.0 0.0" rpy="${pi/2} 0.0 0.0"/>
+        <geometry>
+          <!-- <sphere radius=".1"/> -->
+          <mesh filename="package://mecanum_robot/meshes/mecanum_wheel_right.STL" scale="0.002 .002 0.002"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <sphere radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+
+
+    <!-- Front right wheel-->
+
+    <joint name="fr_wheel_joint" type="continuous">
+      <origin xyz="${wheel_offset_x} -${wheel_offset_y} 0.0" rpy="${pi/2} 0.0 0.0"/>
+      <parent link="base_link"/>
+      <child link="fr_wheel_link"/>
+      <axis xyz="0.0 0.0 -1"/>
+      <limit effort="0.5" velocity="10.0"/>
+    </joint>
+
+    <link name="fr_wheel_link">
+      <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_length}" radius="${wheel_radius}">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      </xacro:inertial_cylinder>
+
+      <visual name="">
+        <origin xyz="0.0 0.0 0.0" rpy="${pi/2} 0.0 0.0"/>
+        <geometry>
+          <!-- <sphere radius=".1"/> -->
+          <mesh filename="package://mecanum_robot/meshes/mecanum_wheel_right.STL" scale="0.002 .002 0.002"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <sphere radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+
+
+    <!-- Rear right wheel-->
+
+    <joint name="rr_wheel_joint" type="continuous">
+      <origin xyz="-${wheel_offset_x} -${wheel_offset_y} 0.0" rpy="${pi/2} 0.0 0.0"/>
+      <parent link="base_link"/>
+      <child link="rr_wheel_link"/>
+      <axis xyz="0.0 0.0 -1"/>
+      <limit effort="0.5" velocity="10.0"/>
+    </joint>
+
+    <link name="rr_wheel_link">
+      <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_length}" radius="${wheel_radius}">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      </xacro:inertial_cylinder>
+
+      <visual name="">
+        <origin xyz="0.0 0.0 0.0" rpy="${pi/2} 0.0 0.0"/>
+        <geometry>
+          <!-- <sphere radius=".1"/> -->
+          <mesh filename="package://mecanum_robot/meshes/mecanum_wheel_left.STL" scale="0.002 .002 0.002"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <sphere radius="${wheel_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+</robot>

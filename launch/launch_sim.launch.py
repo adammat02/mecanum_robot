@@ -64,10 +64,19 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}]
     )
 
+    rviz_config = os.path.join(
+        pkg_share, 'config', 'rviz.rviz'
+    )
+
     rviz = Node(
         package='rviz2',
         executable='rviz2',
-        parameters=[{'use_sim_time': True}]
+        arguments=[
+            '-d',
+            rviz_config
+        ],
+        parameters=[{'use_sim_time': True}],
+        output='screen'
     )
 
     return LaunchDescription([

@@ -4,6 +4,7 @@
   <xacro:include filename="properties.xacro"/>
   <xacro:include filename="inertia_macros.xacro"/>
   <xacro:include filename="materials.xacro"/>
+  <xacro:include filename="gazebo_friction.xacro"/>
 
 
     <!-- base and base footprint -->
@@ -37,7 +38,7 @@
         <geometry>
           <box size="${chassis_x} ${chassis_y} ${chassis_z}"/>
         </geometry>
-        <material name="red"/>
+        <material name="orange"/>
       </visual>
 
       <collision>

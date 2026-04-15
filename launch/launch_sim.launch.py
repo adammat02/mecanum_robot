@@ -64,6 +64,24 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}]
     )
 
+    mecanum_drive_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=[
+            'mecanum_controller',
+            '--controller-ros-args',
+            '-r /mecanum_controller/reference:=/cmd_vel '
+            '-r /mecanum_controller/odometry:=/odom '
+            '-r /mecanum_controller/tf_odometry:=/tf'
+        ]
+    )
+
+    joint_broad_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_broad']   
+    )
+
     rviz_config = os.path.join(
         pkg_share, 'config', 'rviz.rviz'
     )
@@ -86,5 +104,7 @@ def generate_launch_description():
         gazebo,
         spawn_robot,
         gz_bridge,
+        mecanum_drive_spawner,
+        joint_broad_spawner,
         rviz
     ])

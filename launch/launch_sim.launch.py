@@ -6,13 +6,14 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
-
 from launch_ros.actions import Node
+from launch.conditions import IfCondition
 
 def generate_launch_description():
     pkg_name = 'mecanum_robot'
 
     world = LaunchConfiguration('world')
+    use_ros2_control = LaunchConfiguration('use_ros2_control')
 
     pkg_share = get_package_share_directory(pkg_name)
 
@@ -26,11 +27,21 @@ def generate_launch_description():
         value=os.path.dirname(pkg_share)
     )
 
+    use_ros2_control_args = DeclareLaunchArgument(
+        'use_ros2_control',
+        default_value='true',
+        description='Use ros2_control if true'
+    )
+
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(pkg_share, 'launch', 'rsa.launch.py')
         ]),
-        launch_arguments={'use_sim_time': 'true'}.items()
+        launch_arguments={
+            'use_sim_time': 'true',
+            'use_sim': 'true',
+            'use_ros2_control': use_ros2_control
+        }.items()
     )
 
     gz_path = get_package_share_directory('ros_gz_sim')
@@ -73,13 +84,15 @@ def generate_launch_description():
             '-r /mecanum_controller/reference:=/cmd_vel '
             '-r /mecanum_controller/odometry:=/odom '
             '-r /mecanum_controller/tf_odometry:=/tf'
-        ]
+        ],
+        condition=IfCondition(use_ros2_control)
     )
 
     joint_broad_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['joint_broad']   
+        arguments=['joint_broad'],  
+        condition=IfCondition(use_ros2_control)
     )
 
     rviz_config = os.path.join(
@@ -100,6 +113,7 @@ def generate_launch_description():
     return LaunchDescription([
         gz_resource_path,
         world_args,
+        use_ros2_control_args,
         rsp,
         gazebo,
         spawn_robot,

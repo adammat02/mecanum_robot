@@ -2,8 +2,22 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
     
     <ros2_control name="Mecanum_robot" type="system">
-        <hardware>
+        <!-- <hardware>
             <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </hardware> -->
+
+        <hardware>
+          <plugin>mecanum_robot/MecanumSystemHardware</plugin>
+          <param name="front_left_wheel_name">fl_wheel_joint</param>
+          <param name="front_right_wheel_name">fr_wheel_joint</param>
+          <param name="rear_left_wheel_name">rl_wheel_joint</param>
+          <param name="rear_right_wheel_name">rr_wheel_joint</param>
+          <param name="device">/dev/ttyACM0</param>
+          <param name="baud_rate">115200</param>
+          <param name="timeout_ms">1000</param>
+          <param name="kp">3.0</param>
+          <param name="ki">0.5</param>
+          <param name="kd">0.2</param>
         </hardware>
 
         <joint name="fl_wheel_joint">
@@ -40,10 +54,10 @@
         </joint>
     </ros2_control>
 
-    <gazebo>
+    <!-- <gazebo>
         <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
             <parameters>$(find mecanum_robot)/config/controllers.yaml</parameters>
         </plugin>
-    </gazebo>
+    </gazebo> -->
 
 </robot>

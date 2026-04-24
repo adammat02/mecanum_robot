@@ -74,19 +74,9 @@ def generate_launch_description():
         )
     )
 
-    rviz_config = os.path.join(pkg_share, 'config', 'rviz.rviz')
-
-    rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        arguments=['-d', rviz_config],
-        output='screen'
-    )
-
     return LaunchDescription([
         rsp,
         controller_manager,
         delayed_controller_manager,
-        delayed_mecanum_spawner,
-        rviz,
+        delayed_mecanum_spawner
     ])

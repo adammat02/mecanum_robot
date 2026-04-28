@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 30
+    update_rate: 40
 
     mecanum_controller:
       type: mecanum_drive_controller/MecanumDriveController
@@ -9,7 +9,7 @@ controller_manager:
 
 mecanum_controller:
   ros__parameters:
-    update_rate: 50
+    update_rate: 40
     reference_timeout: 0.9
 
     front_left_wheel_command_joint_name: "fl_wheel_joint"
@@ -19,8 +19,8 @@ mecanum_controller:
 
     kinematics:
       base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
-      wheels_radius: 0.1
-      sum_of_robot_center_projection_on_X_Y_axis: 0.4
+      wheels_radius: 0.04
+      sum_of_robot_center_projection_on_X_Y_axis: 0.189
 
     base_frame_id: "base_footprint"
     odom_frame_id: "odom"

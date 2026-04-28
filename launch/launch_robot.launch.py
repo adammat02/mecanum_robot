@@ -74,9 +74,20 @@ def generate_launch_description():
         )
     )
 
+    lidar_pkg = get_package_share_directory('sllidar_ros2')
+    lidar_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(lidar_pkg, 'launch', 'sllidar_a1_launch.py')
+        ]),
+        launch_arguments={
+            'frame_id': 'laser_frame'
+        }.items()
+    )
+
     return LaunchDescription([
         rsp,
         controller_manager,
         delayed_controller_manager,
-        delayed_mecanum_spawner
+        delayed_mecanum_spawner,
+        lidar_launch
     ])

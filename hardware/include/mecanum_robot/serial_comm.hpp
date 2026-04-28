@@ -18,9 +18,9 @@ class SerialComm
   bool is_connected() const;
   std::string send_msg(const std::string &msg_to_send);
   
-  void set_speeds(double val_1, double val_2, double val_3, double val_4);
-  void set_pid(double kp, double ki, double kd);
-  void get_rotations(double &val_1, double &val_2, double &val_3, double &val_4);
+  bool set_speeds(double val_1, double val_2, double val_3, double val_4);
+  bool set_pid(double kp, double ki, double kd);
+  bool get_rotations(double &val_1, double &val_2, double &val_3, double &val_4);
 
 };
 

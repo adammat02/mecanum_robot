@@ -51,7 +51,6 @@ bool SerialComm::is_connected() const
 
 std::string SerialComm::send_msg(const std::string &msg_to_send)
 {
-  serial_.FlushIOBuffers();
   serial_.Write(msg_to_send);
 
   std::string response = "";
@@ -63,32 +62,43 @@ std::string SerialComm::send_msg(const std::string &msg_to_send)
   catch (const LibSerial::ReadTimeout &e)
   {
     std::cerr << e.what() << '\n';
+    response = "ERR\r";
   }
 
   return response;
 }
 
-void SerialComm::set_speeds(double val_1, double val_2, double val_3, double val_4)
+bool SerialComm::set_speeds(double val_1, double val_2, double val_3, double val_4)
 {
+  std::string response;
   std::stringstream ss;
   ss << "S "
      << static_cast<int>(std::lround(val_1)) << " "
      << static_cast<int>(std::lround(val_2)) << " "
      << static_cast<int>(std::lround(val_3)) << " "
      << static_cast<int>(std::lround(val_4)) << "\r";
-  send_msg(ss.str());
+  response = send_msg(ss.str());
+  if (response == "OK\r") 
+    return true;
+  return false;
 }
 
-void SerialComm::set_pid(double kp, double ki, double kd)
+bool SerialComm::set_pid(double kp, double ki, double kd)
 {
+  std::string response;
   std::stringstream ss;
   ss << "P " << kp << " " << ki << " " << kd << "\r";
-  send_msg(ss.str());
+  response = send_msg(ss.str());
+  if (response == "OK\r") 
+    return true;
+  return false;
 }
 
-void SerialComm::get_rotations(double &val_1, double &val_2, double &val_3, double &val_4)
+bool SerialComm::get_rotations(double &val_1, double &val_2, double &val_3, double &val_4)
 {
   std::string response = send_msg("E\r");
+  if (response == "ERR\r") 
+    return false;
 
   std::stringstream ss(response);
   char tag;
@@ -97,7 +107,7 @@ void SerialComm::get_rotations(double &val_1, double &val_2, double &val_3, doub
 
   if (ss.fail() || tag != 'E')
   {
-    std::cerr << "Invalid response: " << response << std::endl;
-    val_1 = val_2 = val_3 = val_4 = 0.0;
+    return false;
   }
+  return true;
 }

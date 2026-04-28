@@ -1,17 +1,29 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
-    <xacro:arg name="use_ros2_control" default="true"/>
 
-    <xacro:include filename="robot_core.xacro"/>
+    <!-- args -->
+    <xacro:arg name="use_ros2_control" default="true"/>
+    <xacro:arg name="use_sim" default="false"/>
+
+    <!-- definitions -->
+    <xacro:include filename="$(find mecanum_robot)/description/properties.xacro"/>
+    <xacro:include filename="$(find mecanum_robot)/description/inertia_macros.xacro"/>
+    <xacro:include filename="$(find mecanum_robot)/description/materials.xacro"/>
+    <xacro:if value="$(arg use_sim)">
+        <xacro:include filename="$(find mecanum_robot)/description/gazebo_friction.xacro"/>
+    </xacro:if>
+
+    <!-- robot core and sensors -->
+    <xacro:include filename="$(find mecanum_robot)/description/robot_core.xacro"/>
+    <xacro:include filename="$(find mecanum_robot)/description/lidar.xacro"/>
     
+    <!-- controllers -->
     <xacro:if value="$(arg use_ros2_control)">
-        <xacro:include filename="ros2_control.xacro"/>
+        <xacro:include filename="$(find mecanum_robot)/description/ros2_control.xacro"/>
     </xacro:if>
     <xacro:unless value="$(arg use_ros2_control)">
-        <xacro:include filename="gazebo_control.xacro"/>
+        <xacro:include filename="$(find mecanum_robot)/description/gazebo_control.xacro"/>
     </xacro:unless>
-
-    <xacro:include filename="lidar.xacro"/>
 
 </robot>

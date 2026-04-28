@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-
-    <xacro:arg name="use_sim" default="false"/>
     
     <ros2_control name="Mecanum_robot" type="system">
         <hardware>
@@ -14,9 +12,9 @@
                 <param name="front_right_wheel_name">fr_wheel_joint</param>
                 <param name="rear_left_wheel_name">rl_wheel_joint</param>
                 <param name="rear_right_wheel_name">rr_wheel_joint</param>
-                <param name="device">/dev/ttyACM0</param>
+                <param name="device">/dev/ttyAMA0</param>
                 <param name="baud_rate">115200</param>
-                <param name="timeout_ms">1000</param>
+                <param name="timeout_ms">50</param>
                 <param name="kp">3.0</param>
                 <param name="ki">0.5</param>
                 <param name="kd">0.2</param>
@@ -25,32 +23,32 @@
 
         <joint name="fl_wheel_joint">
             <command_interface name="velocity">
-                <param name="min">-10</param>
-                <param name="max">10</param>
+                <param name="min">-${velocity}</param>
+                <param name="max">${velocity}</param>
             </command_interface>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>
         <joint name="fr_wheel_joint">
             <command_interface name="velocity">
-                <param name="min">-10</param>
-                <param name="max">10</param>
+                <param name="min">-${velocity}</param>
+                <param name="max">${velocity}</param>
             </command_interface>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>
         <joint name="rl_wheel_joint">
             <command_interface name="velocity">
-                <param name="min">-10</param>
-                <param name="max">10</param>
+                <param name="min">-${velocity}</param>
+                <param name="max">${velocity}</param>
             </command_interface>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>
         <joint name="rr_wheel_joint">
             <command_interface name="velocity">
-                <param name="min">-10</param>
-                <param name="max">10</param>
+                <param name="min">-${velocity}</param>
+                <param name="max">${velocity}</param>
             </command_interface>
             <state_interface name="position"/>
             <state_interface name="velocity"/>

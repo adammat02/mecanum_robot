@@ -1,22 +1,34 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:property name="chassis_x" value="0.5"/>
-    <xacro:property name="chassis_y" value="0.4"/>
-    <xacro:property name="chassis_z" value="0.15"/>
-    <xacro:property name="chassis_visual_offset_z" value="0.02"/>
+    <xacro:property name="chassis_x" value="0.23"/>
+    <xacro:property name="chassis_y" value="0.15"/>
+    <xacro:property name="chassis_z" value="0.05"/>
+    <xacro:property name="chassis_visual_offset_z" value="0.005"/>
     <xacro:property name="chassis_mass" value="1.0"/>
 
-    <xacro:property name="base_link_offset_z" value="0.1"/>
+    <xacro:property name="base_link_offset_z" value="0.04"/>
 
-    <xacro:property name="wheel_radius" value="0.1"/>
-    <xacro:property name="wheel_length" value="0.1"/>
+    <xacro:property name="wheel_radius" value="0.04"/>
+    <xacro:property name="wheel_length" value="0.04"/>
     <xacro:property name="wheel_mass" value="0.2"/>
+    <xacro:property name="wheel_stl_scale" value="0.0008 0.0008 0.0008"/>
 
-    <xacro:property name="wheel_offset_x" value="0.15"/>
-    <xacro:property name="wheel_offset_y" value="0.25"/>
+    <xacro:property name="wheelbase" value="0.174"/>
+    <xacro:property name="wheellength" value="0.204"/>
+    <xacro:property name="wheel_offset_x" value="${wheelbase/2}"/>
+    <xacro:property name="wheel_offset_y" value="${wheellength/2}"/>
 
-    <xacro:property name="wheelbase" value="0.3"/>
-    <xacro:property name="wheellength" value="0.5"/>
+    <xacro:property name="effort" value="0.5" />
+    <xacro:property name="velocity" value="10.0" />
+
+    <xacro:property name="axle_radius" value="0.008"/>
+
+    <xacro:property name="lidar_x" value="0.11" />
+    <xacro:property name="lidar_y" value="0.07" />
+    <xacro:property name="lidar_z" value="0.07" />
+    <xacro:property name="lidar_x_offset" value="0.007" />
+    <xacro:property name="lidar_radius" value="0.035" />
+    <xacro:property name="lidar_length" value="0.025" />
 
 </robot>

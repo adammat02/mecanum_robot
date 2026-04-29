@@ -166,7 +166,7 @@ namespace mecanum_robot
   {
     // BEGIN:
     double dt = period.seconds();
-    std::vector<double> rotations;
+    std::vector<double> rotations(4);
     front_left_.pos_prev = front_left_.pos;
     front_right_.pos_prev = front_right_.pos;
     rear_left_.pos_prev = rear_left_.pos;

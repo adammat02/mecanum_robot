@@ -7,12 +7,15 @@
 struct command_tx
 {
   std::vector<double> speeds;
+
+  command_tx(): speeds(5) {}
 };
 
 struct command_rx
 {
   std::vector<double> rotations;
   // there will be another data in the future
+  command_rx(): rotations(4) {}
 };
 
 

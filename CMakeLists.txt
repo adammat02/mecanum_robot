@@ -36,6 +36,7 @@ add_library(
   SHARED
   hardware/mecanum_system.cpp
   hardware/serial_comm.cpp
+  hardware/serial_protocol.cpp
 )
 target_compile_features(mecanum_robot PUBLIC cxx_std_17)
 target_include_directories(mecanum_robot PUBLIC

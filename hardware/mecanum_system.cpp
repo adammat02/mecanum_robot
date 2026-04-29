@@ -39,7 +39,6 @@ namespace mecanum_robot
       return hardware_interface::CallbackReturn::ERROR;
     }
 
-
     cfg_.front_left_wheel_name = info_.hardware_parameters["front_left_wheel_name"];
     cfg_.front_right_wheel_name = info_.hardware_parameters["front_right_wheel_name"];
     cfg_.rear_left_wheel_name = info_.hardware_parameters["rear_left_wheel_name"];
@@ -135,7 +134,7 @@ namespace mecanum_robot
   {
     // BEGIN:
     RCLCPP_INFO(get_logger(), "Activating ...please wait...");
-    serial_.connect(cfg_.device, cfg_.baud_rate, cfg_.timeout_ms);
+    serial_.connect(cfg_.device, cfg_.baud_rate, cfg_.timeout_ms, '\r');
     // END:
 
     // command and state should be equal when starting
@@ -167,20 +166,22 @@ namespace mecanum_robot
   {
     // BEGIN:
     double dt = period.seconds();
+    std::vector<double> rotations;
     front_left_.pos_prev = front_left_.pos;
     front_right_.pos_prev = front_right_.pos;
     rear_left_.pos_prev = rear_left_.pos;
     rear_right_.pos_prev = rear_right_.pos;
 
-    if (!serial_.get_rotations(
-            front_left_.pos,
-            front_right_.pos,
-            rear_left_.pos,
-            rear_right_.pos))
+    if (!comm_.get_rotations(rotations))
     {
       RCLCPP_ERROR(get_logger(), "Failed to read wheel rotations over serial");
       return hardware_interface::return_type::ERROR;
     }
+
+    front_left_.pos = rotations[0];
+    front_right_.pos = rotations[1];
+    rear_left_.pos = rotations[2];
+    rear_right_.pos = rotations[3];
 
     front_left_.vel = (front_left_.pos - front_left_.pos_prev) / dt;
     front_right_.vel = (front_right_.pos - front_right_.pos_prev) / dt;
@@ -212,7 +213,7 @@ namespace mecanum_robot
     vel3 = static_cast<double>(get_command(rear_left_.name + "/" + hardware_interface::HW_IF_VELOCITY)) * 60.0 / (2*M_PI);
     vel4 = static_cast<double>(get_command(rear_right_.name + "/" + hardware_interface::HW_IF_VELOCITY)) * 60.0 / (2*M_PI);
 
-    if (!serial_.set_speeds(vel1, vel2, vel3, vel4))
+    if (!comm_.set_speeds({vel1, vel2, vel3, vel4}))
     {
       RCLCPP_ERROR(get_logger(), "Failed to send wheel speeds over serial");
       return hardware_interface::return_type::ERROR;

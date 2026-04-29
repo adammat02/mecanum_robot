@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <optional>
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -31,6 +32,7 @@
 #include "rclcpp_lifecycle/state.hpp"
 
 #include "serial_comm.hpp"
+#include "serial_protocol.hpp"
 
 namespace mecanum_robot
 {
@@ -64,6 +66,8 @@ namespace mecanum_robot
     public:
         RCLCPP_SHARED_PTR_DEFINITIONS(MecanumSystemHardware)
 
+        MecanumSystemHardware() : comm_(serial_) {}
+
         hardware_interface::CallbackReturn on_init(
             const hardware_interface::HardwareComponentInterfaceParams &params) override;
 
@@ -84,6 +88,7 @@ namespace mecanum_robot
 
     private:
         SerialComm serial_;
+        SerialProtocol comm_;
         Config cfg_;
         
         Wheel front_left_;

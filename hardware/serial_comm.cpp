@@ -1,6 +1,4 @@
 #include "mecanum_robot/serial_comm.hpp"
-#include <sstream>
-#include <cmath>
 
 LibSerial::BaudRate SerialComm::convert_baud(int baud)
 {
@@ -32,9 +30,10 @@ LibSerial::BaudRate SerialComm::convert_baud(int baud)
   }
 }
 
-void SerialComm::connect(const std::string &serial_device, int baud_rate, int timeout_ms)
+void SerialComm::connect(const std::string &serial_device, int baud_rate, int timeout_ms, char terminator)
 {
   timeout_ms_ = timeout_ms;
+  terminator_ = terminator;
   serial_.Open(serial_device);
   serial_.SetBaudRate(convert_baud(baud_rate));
 }
@@ -49,65 +48,27 @@ bool SerialComm::is_connected() const
   return serial_.IsOpen();
 }
 
-std::string SerialComm::send_msg(const std::string &msg_to_send)
+std::optional<std::string> SerialComm::read_msg()
 {
-  serial_.Write(msg_to_send);
-
-  std::string response = "";
+  std::string response;
 
   try
   {
-    serial_.ReadLine(response, '\r', timeout_ms_);
+    serial_.ReadLine(response, terminator_, timeout_ms_);
   }
   catch (const LibSerial::ReadTimeout &e)
   {
-    std::cerr << e.what() << '\n';
-    response = "ERR\r";
+    std::cerr << e.what() << std::endl;
+    return std::nullopt;
   }
 
   return response;
 }
 
-bool SerialComm::set_speeds(double val_1, double val_2, double val_3, double val_4)
+std::optional<std::string> SerialComm::send_msg(const std::string &msg_to_send)
 {
-  std::string response;
-  std::stringstream ss;
-  ss << "S "
-     << static_cast<int>(std::lround(val_1)) << " "
-     << static_cast<int>(std::lround(val_2)) << " "
-     << static_cast<int>(std::lround(val_3)) << " "
-     << static_cast<int>(std::lround(val_4)) << "\r";
-  response = send_msg(ss.str());
-  if (response == "OK\r") 
-    return true;
-  return false;
-}
+  serial_.Write(msg_to_send);
+  const auto response = read_msg();
 
-bool SerialComm::set_pid(double kp, double ki, double kd)
-{
-  std::string response;
-  std::stringstream ss;
-  ss << "P " << kp << " " << ki << " " << kd << "\r";
-  response = send_msg(ss.str());
-  if (response == "OK\r") 
-    return true;
-  return false;
-}
-
-bool SerialComm::get_rotations(double &val_1, double &val_2, double &val_3, double &val_4)
-{
-  std::string response = send_msg("E\r");
-  if (response == "ERR\r") 
-    return false;
-
-  std::stringstream ss(response);
-  char tag;
-
-  ss >> tag >> val_1 >> val_2 >> val_3 >> val_4;
-
-  if (ss.fail() || tag != 'E')
-  {
-    return false;
-  }
-  return true;
+  return response;
 }

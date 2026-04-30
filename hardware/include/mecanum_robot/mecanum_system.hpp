@@ -91,6 +91,8 @@ namespace mecanum_robot
         SerialProtocol comm_;
         Config cfg_;
 
+        command_rx cmd_rx_;
+        bool data_valid_ = false;
         std::vector<Wheel> wheels_;
 
     };

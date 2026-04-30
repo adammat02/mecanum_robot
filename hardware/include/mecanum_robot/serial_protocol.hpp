@@ -8,7 +8,7 @@ struct command_tx
 {
   std::vector<double> speeds;
 
-  command_tx(): speeds(5) {}
+  command_tx(): speeds(4) {}
 };
 
 struct command_rx

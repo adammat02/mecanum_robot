@@ -52,7 +52,6 @@ namespace mecanum_robot
     cfg_.ki = hardware_interface::stod(info_.hardware_parameters["ki"]);
     cfg_.kd = hardware_interface::stod(info_.hardware_parameters["kd"]);
 
-
     for (const hardware_interface::ComponentInfo &joint : info_.joints)
     {
       // MecanumSystem has exactly two states and one command interface on each joint
@@ -115,6 +114,9 @@ namespace mecanum_robot
     Wheel rear_right_ = {cfg_.rear_right_wheel_name, 0.0, 0.0, 0.0};
 
     wheels_ = {front_left_, front_right_, rear_left_, rear_right_};
+
+    cmd_rx_.rotations = {0.0, 0.0, 0.0, 0.0};
+    data_valid_ = true;
     // END:
 
     // reset values always when configuring hardware
@@ -140,9 +142,14 @@ namespace mecanum_robot
     {
       serial_.connect(cfg_.device, cfg_.baud_rate, cfg_.timeout_ms, '\r');
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
       RCLCPP_ERROR(get_logger(), "Failed to connect to serial device: %s", e.what());
+      return hardware_interface::CallbackReturn::FAILURE;
+    }
+    if (!comm_.reset())
+    {
+      RCLCPP_ERROR(get_logger(), "Failed to reset STM over serial");
       return hardware_interface::CallbackReturn::FAILURE;
     }
     // END:
@@ -176,15 +183,12 @@ namespace mecanum_robot
       const rclcpp::Time & /*time*/, const rclcpp::Duration &period)
   {
     // BEGIN:
+    if (!serial_.is_connected())
+      return hardware_interface::return_type::ERROR;
+
     double dt = period.seconds();
-    std::vector<double> rotations(wheels_.size());
 
-    for (Wheel &w : wheels_)
-    {
-      w.pos_prev = w.pos;
-    }
-
-    if (!comm_.get_rotations(rotations))
+    if (!data_valid_)
     {
       RCLCPP_ERROR(get_logger(), "Failed to read wheel rotations over serial");
       return hardware_interface::return_type::ERROR;
@@ -192,16 +196,14 @@ namespace mecanum_robot
 
     for (size_t i = 0; i < wheels_.size(); ++i)
     {
-      wheels_[i].pos = rotations[i];
+      wheels_[i].pos_prev = wheels_[i].pos;
+      wheels_[i].pos = cmd_rx_.rotations[i];
+      wheels_[i].vel = (wheels_[i].pos - wheels_[i].pos_prev) / dt;
+      set_state(wheels_[i].name + "/position", wheels_[i].pos * 2 * M_PI);
+      set_state(wheels_[i].name + "/velocity", wheels_[i].vel * 2 * M_PI);
     }
 
-    for (Wheel &w : wheels_)
-    {
-      w.vel = (w.pos - w.pos_prev) / dt;
-
-      set_state(w.name + "/position", w.pos * 2 * M_PI);
-      set_state(w.name + "/velocity", w.vel * 2 * M_PI);
-    }
+    data_valid_ = false;
     // END:
     return hardware_interface::return_type::OK;
   }
@@ -210,18 +212,23 @@ namespace mecanum_robot
       const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
   {
     // BEGIN:
-    std::vector<double> velocities(wheels_.size());
+    if (!serial_.is_connected())
+      return hardware_interface::return_type::ERROR;
 
+    command_tx cmd_tx;
     for (size_t i = 0; i < wheels_.size(); ++i)
     {
-      velocities[i] = static_cast<double>(get_command(wheels_[i].name + "/velocity")) * 60.0 / (2*M_PI);
+      cmd_tx.speeds[i] = static_cast<double>(get_command(wheels_[i].name + "/velocity")) * 60.0 / (2 * M_PI);
     }
 
-    if (!comm_.set_speeds(velocities))
+    const auto response = comm_.full_transaction(cmd_tx);
+    if (!response)
     {
       RCLCPP_ERROR(get_logger(), "Failed to send wheel speeds over serial");
       return hardware_interface::return_type::ERROR;
     }
+    data_valid_ = true;
+    cmd_rx_ = response.value();
     // END:
 
     return hardware_interface::return_type::OK;

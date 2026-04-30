@@ -27,8 +27,8 @@ class SerialProtocol
     SPEEDS = 'S',
     ROTATIONS = 'E',
     RESET = 'R',
-    FULL_FRAME_RX = 'F',
-    FULL_FRAME_TX = 'A',
+    FULL_FRAME_RX = 'A',
+    FULL_FRAME_TX = 'F',
   };
   SerialComm &serial_;
 

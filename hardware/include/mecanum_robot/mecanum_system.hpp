@@ -90,11 +90,8 @@ namespace mecanum_robot
         SerialComm serial_;
         SerialProtocol comm_;
         Config cfg_;
-        
-        Wheel front_left_;
-        Wheel front_right_;
-        Wheel rear_left_;
-        Wheel rear_right_;
+
+        std::vector<Wheel> wheels_;
 
     };
 

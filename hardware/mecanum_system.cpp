@@ -108,11 +108,13 @@ namespace mecanum_robot
   {
     // BEGIN:
     RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
-    front_left_ = {cfg_.front_left_wheel_name, 0.0, 0.0, 0.0};
-    front_right_ = {cfg_.front_right_wheel_name, 0.0, 0.0, 0.0};
-    rear_left_ = {cfg_.rear_left_wheel_name, 0.0, 0.0, 0.0};
-    rear_right_ = {cfg_.rear_right_wheel_name, 0.0, 0.0, 0.0};
 
+    Wheel front_left_ = {cfg_.front_left_wheel_name, 0.0, 0.0, 0.0};
+    Wheel front_right_ = {cfg_.front_right_wheel_name, 0.0, 0.0, 0.0};
+    Wheel rear_left_ = {cfg_.rear_left_wheel_name, 0.0, 0.0, 0.0};
+    Wheel rear_right_ = {cfg_.rear_right_wheel_name, 0.0, 0.0, 0.0};
+
+    wheels_ = {front_left_, front_right_, rear_left_, rear_right_};
     // END:
 
     // reset values always when configuring hardware
@@ -134,7 +136,15 @@ namespace mecanum_robot
   {
     // BEGIN:
     RCLCPP_INFO(get_logger(), "Activating ...please wait...");
-    serial_.connect(cfg_.device, cfg_.baud_rate, cfg_.timeout_ms, '\r');
+    try
+    {
+      serial_.connect(cfg_.device, cfg_.baud_rate, cfg_.timeout_ms, '\r');
+    }
+    catch(const std::exception& e)
+    {
+      RCLCPP_ERROR(get_logger(), "Failed to connect to serial device: %s", e.what());
+      return hardware_interface::CallbackReturn::FAILURE;
+    }
     // END:
 
     // command and state should be equal when starting
@@ -153,7 +163,8 @@ namespace mecanum_robot
   {
     // BEGIN:
     RCLCPP_INFO(get_logger(), "Deactivating ...please wait...");
-    serial_.disconnect();
+    if (serial_.is_connected())
+      serial_.disconnect();
     // END:
 
     RCLCPP_INFO(get_logger(), "Successfully deactivated!");
@@ -166,11 +177,12 @@ namespace mecanum_robot
   {
     // BEGIN:
     double dt = period.seconds();
-    std::vector<double> rotations(4);
-    front_left_.pos_prev = front_left_.pos;
-    front_right_.pos_prev = front_right_.pos;
-    rear_left_.pos_prev = rear_left_.pos;
-    rear_right_.pos_prev = rear_right_.pos;
+    std::vector<double> rotations(wheels_.size());
+
+    for (Wheel &w : wheels_)
+    {
+      w.pos_prev = w.pos;
+    }
 
     if (!comm_.get_rotations(rotations))
     {
@@ -178,27 +190,18 @@ namespace mecanum_robot
       return hardware_interface::return_type::ERROR;
     }
 
-    front_left_.pos = rotations[0];
-    front_right_.pos = rotations[1];
-    rear_left_.pos = rotations[2];
-    rear_right_.pos = rotations[3];
+    for (size_t i = 0; i < wheels_.size(); ++i)
+    {
+      wheels_[i].pos = rotations[i];
+    }
 
-    front_left_.vel = (front_left_.pos - front_left_.pos_prev) / dt;
-    front_right_.vel = (front_right_.pos - front_right_.pos_prev) / dt;
-    rear_left_.vel = (rear_left_.pos - rear_left_.pos_prev) / dt;
-    rear_right_.vel = (rear_right_.pos - rear_right_.pos_prev) / dt;
+    for (Wheel &w : wheels_)
+    {
+      w.vel = (w.pos - w.pos_prev) / dt;
 
-    set_state(front_left_.name + "/" + hardware_interface::HW_IF_POSITION, front_left_.pos * 2*M_PI);
-    set_state(front_left_.name + "/" + hardware_interface::HW_IF_VELOCITY, front_left_.vel * 2*M_PI);
-
-    set_state(front_right_.name + "/" + hardware_interface::HW_IF_POSITION, front_right_.pos * 2*M_PI);
-    set_state(front_right_.name + "/" + hardware_interface::HW_IF_VELOCITY, front_right_.vel * 2*M_PI);
-
-    set_state(rear_left_.name + "/" + hardware_interface::HW_IF_POSITION, rear_left_.pos * 2*M_PI);
-    set_state(rear_left_.name + "/" + hardware_interface::HW_IF_VELOCITY, rear_left_.vel * 2*M_PI);
-
-    set_state(rear_right_.name + "/" + hardware_interface::HW_IF_POSITION, rear_right_.pos * 2*M_PI);
-    set_state(rear_right_.name + "/" + hardware_interface::HW_IF_VELOCITY, rear_right_.vel * 2*M_PI);
+      set_state(w.name + "/position", w.pos * 2 * M_PI);
+      set_state(w.name + "/velocity", w.vel * 2 * M_PI);
+    }
     // END:
     return hardware_interface::return_type::OK;
   }
@@ -207,13 +210,14 @@ namespace mecanum_robot
       const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
   {
     // BEGIN:
-    double vel1, vel2, vel3, vel4;
-    vel1 = static_cast<double>(get_command(front_left_.name + "/" + hardware_interface::HW_IF_VELOCITY)) * 60.0 / (2*M_PI);
-    vel2 = static_cast<double>(get_command(front_right_.name + "/" + hardware_interface::HW_IF_VELOCITY)) * 60.0 / (2*M_PI);
-    vel3 = static_cast<double>(get_command(rear_left_.name + "/" + hardware_interface::HW_IF_VELOCITY)) * 60.0 / (2*M_PI);
-    vel4 = static_cast<double>(get_command(rear_right_.name + "/" + hardware_interface::HW_IF_VELOCITY)) * 60.0 / (2*M_PI);
+    std::vector<double> velocities(wheels_.size());
 
-    if (!comm_.set_speeds({vel1, vel2, vel3, vel4}))
+    for (size_t i = 0; i < wheels_.size(); ++i)
+    {
+      velocities[i] = static_cast<double>(get_command(wheels_[i].name + "/velocity")) * 60.0 / (2*M_PI);
+    }
+
+    if (!comm_.set_speeds(velocities))
     {
       RCLCPP_ERROR(get_logger(), "Failed to send wheel speeds over serial");
       return hardware_interface::return_type::ERROR;

@@ -99,6 +99,16 @@ namespace mecanum_robot
       }
     }
 
+    for (const hardware_interface::ComponentInfo &sensor : info_.sensors)
+    {
+      if (sensor.state_interfaces.empty())
+      {
+        RCLCPP_FATAL(get_logger(), "Sensor '%s' has no state interfaces.",
+                     sensor.name.c_str());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
+
     return hardware_interface::CallbackReturn::SUCCESS;
   }
 
@@ -127,6 +137,10 @@ namespace mecanum_robot
     for (const auto &[name, descr] : joint_command_interfaces_)
     {
       set_command(name, 0.0);
+    }
+    for (const auto &[name, descr] : sensor_state_interfaces_)
+    {
+      set_state(name, 0.0);
     }
     RCLCPP_INFO(get_logger(), "Successfully configured!");
 
@@ -194,6 +208,7 @@ namespace mecanum_robot
       return hardware_interface::return_type::ERROR;
     }
 
+    // wheels
     for (size_t i = 0; i < wheels_.size(); ++i)
     {
       wheels_[i].pos_prev = wheels_[i].pos;
@@ -202,6 +217,8 @@ namespace mecanum_robot
       set_state(wheels_[i].name + "/position", wheels_[i].pos * 2 * M_PI);
       set_state(wheels_[i].name + "/velocity", wheels_[i].vel * 2 * M_PI);
     }
+    // battery
+    set_state("battery_state/voltage", cmd_rx_.battery_voltage);
 
     data_valid_ = false;
     // END:

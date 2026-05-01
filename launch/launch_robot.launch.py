@@ -54,6 +54,12 @@ def generate_launch_description():
         ]
     )
 
+    battery_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["battery_state_broad"],
+    )
+
     joint_broad_spawner = Node(
         package='controller_manager',
         executable='spawner',
@@ -89,5 +95,6 @@ def generate_launch_description():
         controller_manager,
         delayed_controller_manager,
         delayed_mecanum_spawner,
+        battery_state_broadcaster_spawner,
         lidar_launch
     ])

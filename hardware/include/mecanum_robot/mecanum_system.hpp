@@ -93,6 +93,7 @@ namespace mecanum_robot
 
         command_rx cmd_rx_;
         bool data_valid_ = false;
+
         std::vector<Wheel> wheels_;
 
     };

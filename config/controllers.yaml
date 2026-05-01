@@ -6,6 +6,8 @@ controller_manager:
       type: mecanum_drive_controller/MecanumDriveController
     joint_broad:
       type: joint_state_broadcaster/JointStateBroadcaster
+    battery_state_broad:
+      type: battery_state_broadcaster/BatteryStateBroadcaster
 
 mecanum_controller:
   ros__parameters:
@@ -27,3 +29,9 @@ mecanum_controller:
     enable_odom_tf: true
     twist_covariance_diagonal: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
     pose_covariance_diagonal: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+
+battery_state_broad:
+  ros__parameters:
+    sensor_name: "battery_state"
+    design_capacity: 800.0
+    power_supply_technology: 2

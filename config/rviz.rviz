@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /LaserScan1/Topic1
-        - /Map1
         - /Map1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 707
@@ -28,7 +27,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Visualization Manager:
   Class: ""
   Displays:
@@ -56,14 +55,64 @@ Visualization Manager:
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
+        base_footprint:
+          Value: false
+        base_link:
+          Value: true
+        chassis_link:
+          Value: false
+        fl_axle_link:
+          Value: false
+        fl_wheel_link:
+          Value: true
+        fr_axle_link:
+          Value: false
+        fr_wheel_link:
+          Value: true
+        laser_frame:
+          Value: false
+        lidar_link:
+          Value: false
+        odom:
+          Value: false
+        rl_axle_link:
+          Value: false
+        rl_wheel_link:
+          Value: true
+        rr_axle_link:
+          Value: false
+        rr_wheel_link:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        odom:
+          base_footprint:
+            base_link:
+              chassis_link:
+                lidar_link:
+                  laser_frame:
+                    {}
+              fl_axle_link:
+                {}
+              fl_wheel_link:
+                {}
+              fr_axle_link:
+                {}
+              fr_wheel_link:
+                {}
+              rl_axle_link:
+                {}
+              rl_wheel_link:
+                {}
+              rr_axle_link:
+                {}
+              rr_wheel_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -84,6 +133,69 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        chassis_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        fl_axle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        fl_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        fr_axle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        fr_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        laser_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lidar_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rl_axle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rl_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rr_axle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rr_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -186,10 +298,38 @@ Visualization Manager:
         Value: /global_costmap/costmap_updates
       Use Timestamp: false
       Value: true
+    - Align Bottom: false
+      Background Alpha: 0.800000011920929
+      Background Color: 0; 0; 0
+      Class: rviz_2d_overlay_plugins/TextOverlay
+      Enabled: true
+      Foreground Alpha: 0.800000011920929
+      Foreground Color: 25; 255; 240
+      Invert Shadow: false
+      Name: TextOverlay
+      Overtake BG Color Properties: false
+      Overtake FG Color Properties: false
+      Overtake Position Properties: false
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /battery_display_text
+      Value: true
+      font: DejaVu Sans Mono
+      height: 128
+      hor_alignment: left
+      hor_dist: 0
+      line width: 2
+      text size: 12
+      ver_alignment: top
+      ver_dist: 0
+      width: 128
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: map
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -232,7 +372,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 8.913886070251465
+      Distance: 3.119288921356201
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -247,10 +387,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.060397982597351
+      Pitch: 0.6453983783721924
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.753554821014404
+      Yaw: 5.023549556732178
     Saved: ~
 Window Geometry:
   Displays:

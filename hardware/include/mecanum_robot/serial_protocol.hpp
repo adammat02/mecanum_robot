@@ -14,6 +14,7 @@ struct command_tx
 struct command_rx
 {
   std::vector<double> rotations;
+  double battery_voltage;
   // there will be another data in the future
   command_rx(): rotations(4) {}
 };

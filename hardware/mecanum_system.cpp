@@ -220,6 +220,9 @@ namespace mecanum_robot
     // battery
     set_state("battery_state/voltage", cmd_rx_.battery_voltage);
 
+    // range sensor
+    set_state("range_sensor/range", cmd_rx_.range_sensor_distance);
+
     data_valid_ = false;
     // END:
     return hardware_interface::return_type::OK;

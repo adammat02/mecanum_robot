@@ -17,6 +17,7 @@
     <!-- robot core and sensors -->
     <xacro:include filename="$(find mecanum_robot)/description/robot_core.xacro"/>
     <xacro:include filename="$(find mecanum_robot)/description/lidar.xacro"/>
+    <xacro:include filename="$(find mecanum_robot)/description/distance_sensor.xacro"/>
     
     <!-- controllers -->
     <xacro:if value="$(arg use_ros2_control)">

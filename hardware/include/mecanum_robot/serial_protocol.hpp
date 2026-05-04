@@ -15,7 +15,8 @@ struct command_rx
 {
   std::vector<double> rotations;
   double battery_voltage;
-  // there will be another data in the future
+  double range_sensor_distance;
+
   command_rx(): rotations(4) {}
 };
 
@@ -31,6 +32,7 @@ class SerialProtocol
     FULL_FRAME_RX = 'A',
     FULL_FRAME_TX = 'F',
   };
+  
   SerialComm &serial_;
 
   std::string serialize_tx(command_tx tx);

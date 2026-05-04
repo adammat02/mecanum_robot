@@ -25,6 +25,10 @@
             <state_interface name="voltage" />
         </sensor>
 
+        <sensor name="range_sensor">
+            <state_interface name="range" />
+        </sensor>
+
         <joint name="fl_wheel_joint">
             <command_interface name="velocity">
                 <param name="min">-${velocity}</param>

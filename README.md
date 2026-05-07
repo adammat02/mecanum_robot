@@ -25,6 +25,26 @@ This project builds upon my previous work:
 - **URDF / Xacro** — robot description
 - **Nav2** — autonomous navigation stack (planned)
 
+## Installation
+
+```bash
+# 1. Clone into workspace
+cd ~/ros2_ws/src
+git clone <url> mecanum_robot
+
+# 2. Fetch external packages from GitHub
+cd ~/ros2_ws
+vcs import src < src/mecanum_robot/mecanum_robot.repos
+
+# 3. Install apt dependencies (including libserial-dev)
+rosdep install --from-paths src --ignore-src -r -y
+
+# 4. Build
+colcon build --symlink-install
+```
+
+> `vcs` is available via `sudo apt install python3-vcstool`.
+
 ## License
 
 Apache-2.0

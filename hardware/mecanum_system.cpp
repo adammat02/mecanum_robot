@@ -155,6 +155,7 @@ namespace mecanum_robot
     try
     {
       serial_.connect(cfg_.device, cfg_.baud_rate, cfg_.timeout_ms, '\r');
+      serial_.flush();
     }
     catch (const std::exception &e)
     {

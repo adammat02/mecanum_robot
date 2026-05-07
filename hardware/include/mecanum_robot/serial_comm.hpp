@@ -18,6 +18,7 @@ public:
   void connect(const std::string &serial_device, int baud_rate, int timeout_ms, char terminator);
   void disconnect();
   bool is_connected() const;
+  void flush();
   std::optional<std::string> read_msg();
   std::optional<std::string> send_msg(const std::string &msg_to_send);
 };

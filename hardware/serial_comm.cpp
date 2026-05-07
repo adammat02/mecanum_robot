@@ -48,6 +48,11 @@ bool SerialComm::is_connected() const
   return serial_.IsOpen();
 }
 
+void SerialComm::flush()
+{
+  serial_.FlushIOBuffers();
+}
+
 std::optional<std::string> SerialComm::read_msg()
 {
   std::string response;

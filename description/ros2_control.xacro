@@ -13,7 +13,7 @@
                 <param name="rear_left_wheel_name">rl_wheel_joint</param>
                 <param name="rear_right_wheel_name">rr_wheel_joint</param>
                 <param name="device">/dev/ttyAMA0</param>
-                <param name="baud_rate">115200</param>
+                <param name="baud_rate">230400</param>
                 <param name="timeout_ms">50</param>
                 <param name="kp">3.0</param>
                 <param name="ki">0.5</param>

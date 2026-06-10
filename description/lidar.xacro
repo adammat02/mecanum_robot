@@ -4,7 +4,7 @@
     <joint name="lidar_chassis_joint" type="fixed">
         <parent link="chassis_link"/>
         <child link="lidar_link"/>
-        <origin xyz="0.0 0 ${(chassis_z+lidar_z)/2 + chassis_visual_offset_z}" rpy="0 0 ${pi/2}"/>
+        <origin xyz="${lidar_x_offset} 0 ${(chassis_z+lidar_z)/2 + chassis_visual_offset_z}" rpy="0 0 ${pi}"/>
     </joint>
 
     <link name="lidar_link">
@@ -29,7 +29,7 @@
     <joint name="lidar_joint" type="fixed">
         <parent link="lidar_link"/>
         <child link="laser_frame"/>
-        <origin xyz="${lidar_x_offset} 0 ${(lidar_z+lidar_length)/2}" rpy="0 0 ${pi}"/>
+        <origin xyz="${lidar_x_offset} 0 ${(lidar_z+lidar_length)/2}" rpy="0 0 0"/>
     </joint>
 
     <link name="laser_frame">

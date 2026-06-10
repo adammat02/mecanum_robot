@@ -24,10 +24,10 @@
 
     <xacro:property name="axle_radius" value="0.008"/>
 
-    <xacro:property name="lidar_x" value="0.11" />
-    <xacro:property name="lidar_y" value="0.07" />
-    <xacro:property name="lidar_z" value="0.07" />
-    <xacro:property name="lidar_x_offset" value="0.007" />
+    <xacro:property name="lidar_x" value="0.097" />
+    <xacro:property name="lidar_y" value="0.072" />
+    <xacro:property name="lidar_z" value="0.035" />
+    <xacro:property name="lidar_x_offset" value="0.012" />
     <xacro:property name="lidar_radius" value="0.035" />
     <xacro:property name="lidar_length" value="0.025" />
 

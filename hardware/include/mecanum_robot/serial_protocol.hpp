@@ -15,7 +15,8 @@ struct command_rx
 {
   std::vector<double> rotations;
   double battery_voltage;
-  double range_sensor_distance;
+  double range_sensor_distance1;
+  double range_sensor_distance2;
 
   command_rx(): rotations(4) {}
 };

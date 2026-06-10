@@ -80,7 +80,8 @@ std::optional<command_rx> SerialProtocol::deserialize_rx(const std::string &stri
      >> rx.rotations[2]
      >> rx.rotations[3]
      >> rx.battery_voltage
-     >> rx.range_sensor_distance;
+     >> rx.range_sensor_distance1
+     >> rx.range_sensor_distance2;
   if (ss.fail() || tag != static_cast<char>(FULL_FRAME_RX))
     return std::nullopt;
   return rx;

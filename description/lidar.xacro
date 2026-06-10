@@ -29,7 +29,7 @@
     <joint name="lidar_joint" type="fixed">
         <parent link="lidar_link"/>
         <child link="laser_frame"/>
-        <origin xyz="${lidar_x_offset} 0 ${(lidar_z+lidar_length)/2}" rpy="0 0 0"/>
+        <origin xyz="${lidar_x_offset} 0 ${(lidar_z+lidar_length)/2}" rpy="0 0 ${pi}"/>
     </joint>
 
     <link name="laser_frame">

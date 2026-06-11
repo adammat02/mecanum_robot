@@ -4,6 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /TF1/Frames1
         - /LaserScan1/Topic1
         - /Map1/Topic1
       Splitter Ratio: 0.5
@@ -25,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Visualization Manager:
   Class: ""
   Displays:
@@ -82,7 +83,9 @@ Visualization Manager:
           Value: false
         rr_wheel_link:
           Value: true
-        tof_frame:
+        tof1_frame:
+          Value: false
+        tof2_frame:
           Value: false
       Marker Scale: 1
       Name: TF
@@ -97,7 +100,9 @@ Visualization Manager:
                 lidar_link:
                   laser_frame:
                     {}
-                tof_frame:
+                tof1_frame:
+                  {}
+                tof2_frame:
                   {}
               fl_axle_link:
                 {}
@@ -198,7 +203,12 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        tof_frame:
+        tof1_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tof2_frame:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -345,7 +355,21 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /range_sensor_broad/range
+        Value: /range_sensor_1_broad/range
+      Value: true
+    - Alpha: 0.5
+      Buffer Length: 1
+      Class: rviz_default_plugins/Range
+      Color: 255; 255; 255
+      Enabled: true
+      Name: Range
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /range_sensor_2_broad/range
       Value: true
   Enabled: true
   Global Options:
@@ -393,7 +417,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.9778804779052734
+      Distance: 0.969801664352417
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -408,10 +432,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.22539882361888885
+      Pitch: 0.5603988766670227
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.4635467529296875
+      Yaw: 4.993554592132568
     Saved: ~
 Window Geometry:
   Displays:

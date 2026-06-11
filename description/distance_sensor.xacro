@@ -4,7 +4,7 @@
     <joint name="tof1_joint" type="fixed">
         <parent link="chassis_link"/>
         <child link="tof1_frame"/>
-        <origin xyz="${chassis_x/2 + tof_x/2} ${tof_y_offset} ${chassis_visual_offset_z}" rpy="0 0 0"/>
+        <origin xyz="${chassis_x/2 + tof_x/2 + tof_x_offset} ${tof_y_offset} ${chassis_visual_offset_z + tof_z_offset}" rpy="0 0 ${tof_y_rot}"/>
     </joint>
 
     <link name="tof1_frame">
@@ -29,7 +29,7 @@
     <joint name="tof2_joint" type="fixed">
         <parent link="chassis_link"/>
         <child link="tof2_frame"/>
-        <origin xyz="${chassis_x/2 + tof_x/2} -${tof_y_offset} ${chassis_visual_offset_z}" rpy="0 0 0"/>
+        <origin xyz="${chassis_x/2 + tof_x/2 + tof_x_offset} -${tof_y_offset} ${chassis_visual_offset_z + tof_z_offset}" rpy="0 0 -${tof_y_rot}"/>
     </joint>
 
     <link name="tof2_frame">

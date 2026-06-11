@@ -25,7 +25,11 @@
             <state_interface name="voltage" />
         </sensor>
 
-        <sensor name="range_sensor">
+        <sensor name="range_sensor_1">
+            <state_interface name="range" />
+        </sensor>
+
+        <sensor name="range_sensor_2">
             <state_interface name="range" />
         </sensor>
 

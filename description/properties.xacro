@@ -34,5 +34,6 @@
     <xacro:property name="tof_x" value="0.01" />
     <xacro:property name="tof_y" value="0.02" />
     <xacro:property name="tof_z" value="0.015" />
+    <xacro:property name="tof_y_offset" value="0.02" />
 
 </robot>

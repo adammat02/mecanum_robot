@@ -8,7 +8,9 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
     battery_state_broad:
       type: battery_state_broadcaster/BatteryStateBroadcaster
-    range_sensor_broad:
+    range_sensor_1_broad:
+      type: range_sensor_broadcaster/RangeSensorBroadcaster
+    range_sensor_2_broad:
       type: range_sensor_broadcaster/RangeSensorBroadcaster
 
 mecanum_controller:
@@ -38,13 +40,24 @@ battery_state_broad:
     design_capacity: 800.0
     power_supply_technology: 2
 
-range_sensor_broad:
+range_sensor_1_broad:
   ros__parameters:
-    sensor_name: "range_sensor"
-    frame_id: "tof_frame"
+    sensor_name: "range_sensor_1"
+    frame_id: "tof1_frame"
 
     radiation_type: 1
     field_of_view: 0.44
     min_range: 0.02
-    max_range: 2.0
+    max_range: 4.0
+    variance: 0.000009
+
+range_sensor_2_broad:
+  ros__parameters:
+    sensor_name: "range_sensor_2"
+    frame_id: "tof2_frame"
+
+    radiation_type: 1
+    field_of_view: 0.44
+    min_range: 0.02
+    max_range: 4.0
     variance: 0.000009
